@@ -1,4 +1,5 @@
 # EMDRConsumer
+[![Build Status](https://drone.element-43.com/api/badges/EVE-Tools/emdr_consumer/status.svg)](https://drone.element-43.com/EVE-Tools/emdr_consumer)
 
 This is a very simple service which just connects EMDR to our internal NSQ. For now it only supports `orders` messages from EMDR. EMDR's messages are split up by rowset before being submitted to the `orders` queue. Also, the order's attributes get mapped for easier access later on. Processing bulk updates of the market can result in lots of messages on NSQ as the original EMDR message contains many rowsets. The application consists of two processes: the `worker` which takes messages from EMDR, reformats them and sends them to the `nsq_publisher` which then takes those messages and pushes them to NSQ.
 
