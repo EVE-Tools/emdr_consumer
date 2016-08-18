@@ -13,7 +13,7 @@ Either use the prebuilt Docker images and pass the appropriate env vars (see bel
 
 ## Deployment Info
 
-Builds, tests and releases are handled by drone.
+Builds, tests and releases are handled by Drone.
 
 Environment Variable | Example | Description
 --- | --- | ---
