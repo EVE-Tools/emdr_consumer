@@ -1,0 +1,7 @@
+/_build
+/cover
+/deps
+/dist
+/rel/emdr_consumer
+erl_crash.dump
+*.ez

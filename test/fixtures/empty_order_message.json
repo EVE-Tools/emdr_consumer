@@ -1,0 +1,19 @@
+{
+  "resultType" : "orders",
+  "version" : "0.1",
+  "uploadKeys" : [
+    { "name" : "emk", "key" : "abc" },
+    { "name" : "ec" , "key" : "def" }
+  ],
+  "generator" : { "name" : "Yapeal", "version" : "11.335.1737" },
+  "currentTime" : "2011-10-22T15:46:00+00:00",
+  "columns" : ["price","volRemaining","range","orderID","volEntered","minVolume","bid","issueDate","duration","stationID","solarSystemID"],
+  "rowsets" : [
+    {
+      "generatedAt" : "2011-10-22T15:43:00+00:00",
+      "regionID" : 10000065,
+      "typeID" : 11136,
+      "rows" : []
+    }
+  ]
+}

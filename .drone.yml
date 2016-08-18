@@ -1,0 +1,24 @@
+pipeline:
+  test:
+    image: evetools/elixir-build-base:latest
+    environment:
+      MIX_ENV: test
+    commands:
+      - mix do deps.get, deps.compile
+      - mix test --no-start
+
+  build:
+    image: evetools/elixir-build-base:latest
+    environment:
+      MIX_ENV: prod
+    commands:
+      - mix do deps.get, deps.compile
+      - mix release --env=prod
+      - mkdir dist
+      - find rel -name "*.tar.gz" -exec tar -xvzf {} --directory=dist \;
+  publish:
+    docker:
+      repo: evetools/emdr_consumer
+      tag:
+        - latest
+        - ${DRONE_BRANCH}
