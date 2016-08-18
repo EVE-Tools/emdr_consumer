@@ -17,9 +17,8 @@ pipeline:
       - mkdir dist
       - find rel -name "*.tar.gz" -exec tar -xvzf {} --directory=dist \;
 
-  publish:
-    docker:
-      repo: evetools/emdr_consumer
-      tag:
-        - latest
-        - ${DRONE_BRANCH}
+  docker:
+    repo: evetools/emdr_consumer
+    tag:
+      - latest
+      - ${DRONE_BRANCH}
