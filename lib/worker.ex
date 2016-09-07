@@ -13,13 +13,16 @@ defmodule EMDRConsumer.Worker do
     EMDR.
   """
   def init(_params) do
+    emdr_relay = Config.get(:emdr_consumer, :relay)
+    regex_name = Regex.compile!(Config.get(:emdr_consumer, :regex_name))
+    regex_version = Regex.compile!(Config.get(:emdr_consumer, :regex_version))
+
     {:ok, context} = :erlzmq.context()
     {:ok, socket} = :erlzmq.socket(context, [:sub, active: true])
-    emdr_relay = Config.get(:emdr_consumer, :relay)
     :ok = :erlzmq.connect(socket, emdr_relay)
     :ok = :erlzmq.setsockopt(socket, :subscribe, "")
 
-    {:ok, socket}
+    {:ok, %{socket: socket, regex_name: regex_name, regex_version: regex_version}}
   end
 
   @doc """
@@ -28,7 +31,7 @@ defmodule EMDRConsumer.Worker do
   def handle_info({:zmq, _socket, message, _more}, state) do
     message
     |> decompress
-    |> process
+    |> process(state)
     |> send_orders
 
     {:noreply, state}
@@ -37,10 +40,10 @@ defmodule EMDRConsumer.Worker do
   @doc """
     Process message for submission to NSQ
   """
-  def process(message) do
+  def process(message, state) do
     message
     |> decode
-    |> filter
+    |> filter(state)
     |> convert_uudif_to_orders
     |> convert_rowsets_to_json
   end
@@ -64,10 +67,42 @@ defmodule EMDRConsumer.Worker do
     Only process "order" messages for now
     TODO: handle history messages, too
   """
-  def filter(message) do
+  def filter(message, state) do
+    message
+    |> filter_orders
+    |> filter_name(state)
+    |> filter_version(state)
+  end
+
+  @doc """
+    Filter messages which are not orders
+  """
+  def filter_orders(message) do
     case message["resultType"] do
       "orders" -> message
       _ -> []
+    end
+  end
+
+  @doc """
+    Filter messages by generator's name
+  """
+  def filter_name([], _state), do: []
+  def filter_name(message, state) do
+    case Regex.match?(state.regex_name, message["generator"]["name"]) do
+      true -> message
+      false -> []
+    end
+  end
+
+  @doc """
+    Filter messages by generator's version
+  """
+  def filter_version([], _state), do: []
+  def filter_version(message, state) do
+    case Regex.match?(state.regex_version, message["generator"]["version"]) do
+      true -> message
+      false -> []
     end
   end
 

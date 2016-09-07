@@ -1,7 +1,7 @@
 # EMDRConsumer
 [![Build Status](https://drone.element-43.com/api/badges/EVE-Tools/emdr_consumer/status.svg)](https://drone.element-43.com/EVE-Tools/emdr_consumer)
 
-This is a very simple service which just connects EMDR to our internal NSQ. For now it only supports `orders` messages from EMDR. EMDR's messages are split up by rowset before being submitted to the `orders` queue. Also, the order's attributes get mapped for easier access later on. Processing bulk updates of the market can result in lots of messages on NSQ as the original EMDR message contains many rowsets. The application consists of two processes: the `worker` which takes messages from EMDR, reformats them and sends them to the `nsq_publisher` which then takes those messages and pushes them to NSQ.
+This is a very simple service which just connects EMDR to our internal NSQ. For now it only supports `orders` messages from EMDR. EMDR's messages are split up by rowset before being submitted to the `orders` queue. Also, the order's attributes get mapped for easier access later on. Processing bulk updates of the market can result in lots of messages (read: multiple thousand) on NSQ as the original EMDR message contains many rowsets. The application consists of two processes: the `worker` which takes messages from EMDR, reformats them and sends them to the `nsq_publisher` which then takes those messages and pushes them to NSQ. If the backend is overwhelmed by the message influx, you can filter messages by their generator. In most cases this only leads to de-duplication of information, as EMDR is fed by multiple redundant sources.
 
 ## Installation
 Either use the prebuilt Docker images and pass the appropriate env vars (see below), or:
@@ -20,6 +20,8 @@ Environment Variable | Example | Description
 --- | --- | ---
 EMDR_RELAY_URL | tcp://relay-eu-germany-1.eve-emdr.com:8050 | EMDR relay to connect to
 NSQD_SERVER_IP | 127.0.0.1:4150 | Hostname/IP of the NSQD instance to connect to
+GENERATOR_NAME_FILTER | (.\*) | Only forward messages by a generator whose name matches this regex (see input example below). Remember to properly escape special characters in the regex.
+GENERATOR_VERSION_FILTER | (.\*) | Only forward messages by a generator whose version matches this regex (see input example below). Remember to properly escape special characters in the regex.
 
 ## Todo
 - [ ] Also process `history` messages if necessary later on

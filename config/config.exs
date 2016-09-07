@@ -30,4 +30,6 @@ use Mix.Config
 #     import_config "#{Mix.env}.exs"
 config :emdr_consumer,
   relay: {:system, "EMDR_RELAY_URL", "tcp://relay-eu-germany-1.eve-emdr.com:8050"},
-  nsqd: {:system, "NSQD_SERVER_IP", "nsqd:4150"}
+  nsqd: {:system, "NSQD_SERVER_IP", "nsqd:4150"},
+  regex_name: {:system, "REGEX_NAME", "(.*)"},
+  regex_version: {:system, "REGEX_VERSION", "(.*)"}
