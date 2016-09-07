@@ -20,8 +20,8 @@ Environment Variable | Example | Description
 --- | --- | ---
 EMDR_RELAY_URL | tcp://relay-eu-germany-1.eve-emdr.com:8050 | EMDR relay to connect to
 NSQD_SERVER_IP | 127.0.0.1:4150 | Hostname/IP of the NSQD instance to connect to
-GENERATOR_NAME_FILTER | (.\*) | Only forward messages by a generator whose name matches this regex (see input example below). Remember to properly escape special characters in the regex.
-GENERATOR_VERSION_FILTER | (.\*) | Only forward messages by a generator whose version matches this regex (see input example below). Remember to properly escape special characters in the regex.
+REGEX_NAME | (.\*) | Only forward messages by a generator whose name matches this regex (see input example below). Remember to properly escape special characters in the regex.
+REGEX_VERSION | (.\*) | Only forward messages by a generator whose version matches this regex (see input example below). Remember to properly escape special characters in the regex.
 
 ## Todo
 - [ ] Also process `history` messages if necessary later on
