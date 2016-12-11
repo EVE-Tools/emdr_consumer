@@ -30,7 +30,7 @@ defmodule EMDRConsumer.Mixfile do
   defp deps do
     [
       {:jiffy, "~> 0.14.7"},
-      {:elixir_nsq, github: "wistia/elixir_nsq"},
+      {:elixir_nsq, github: "wistia/elixir_nsq", ref: "5934956"},
       {:erlzmq, github: "zeromq/erlzmq2"},
       {:distillery, "~> 0.9"}
     ]

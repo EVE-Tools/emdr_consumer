@@ -26,7 +26,7 @@ defmodule EMDRConsumer.Worker do
   end
 
   @doc """
-    Receive and parse messages, split them up and send them away via NSQ
+    Receive and parse messages, split them up and send them away via NSQ.
   """
   def handle_info({:zmq, _socket, message, _more}, state) do
     message
@@ -145,9 +145,8 @@ defmodule EMDRConsumer.Worker do
 
   defp send_orders([]), do: :ok
 
-  defp send_orders(orders) do
+  defp send_orders(rowsets) do
     # Push those orders to NSQ
-
-    GenServer.cast({:global, :nsq_publisher}, {:orders, orders})
+    GenServer.cast({:global, :nsq_publisher}, {:orders, rowsets})
   end
 end
